@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="2 seconds">
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+    <conversionRule conversionWord="traceID" converterClass="kamon.logback.LogbackTraceIDConverter" />
+
+    <logger name="org.http4s.blaze.channel.ServerChannelGroup" level="OFF"/>
+
+    <logger name="org.http4s.blaze.channel.nio1.NIO1SocketServerGroup" level="WARN"/>
+    <!--These two loggers can be removed once HTTP4S is updated to 0.19.0-M3 -->
+    <logger name="org.http4s.blaze.pipeline.stages.QuietTimeoutStage" level="ERROR"/>
+    <logger name="org.http4s.server.blaze.Http1ServerStage" level="ERROR"/>
+
+    <root level="${LOGLEVEL_ROOT:-INFO}">
+        <if condition='!isDefined("TNT_STAGE")'>
+            <then>
+                <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+                    <target>System.out</target>
+                    <encoder>
+                        <pattern>%d{ISO8601} [%traceID] %-5level [%logger{0}] [%thread] - %msg%n</pattern>
+                    </encoder>
+                </appender>
+            </then>
+        </if>
+    </root>
+</configuration>
